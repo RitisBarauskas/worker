@@ -35,14 +35,14 @@ class Department(models.Model):
         """
         Количество активных сотрудников подразделения
         """
-        return self.all()
+        return Worker.objects.filter(department=self).count()
 
     @property
     def get_all_worker_count(self):
         """
         Количество всех сотрудников подразделения
         """
-        return self.all()
+        return Worker.objects_all.filter(department=self).count()
 
     def __str__(self):
         return self.name
@@ -68,7 +68,7 @@ class Worker(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.last_name} {self.first_name}, {self.tab_num}, {self.department}'
+        return f'{self.last_name} {self.first_name}'
 
     class Meta:
         db_table = 'workers'
