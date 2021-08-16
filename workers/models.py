@@ -11,7 +11,7 @@ class WorkerManager(models.Manager):
         Переопределенный кверисет с фильтрацией сотрудников с заданной датой принятия на работу и с не пустым табельным номером отличным от 0
         """
 
-        return super(WorkerManager, self).get_queryset().filter(startwork_date__isnull=False, tab_num__gt=0)
+        return super(WorkerManager, self).get_queryset().filter(startwork_date__isnull=False).exclude(tab_num=0)
 
     def get_workers_info(self):
         """
@@ -21,10 +21,16 @@ class WorkerManager(models.Manager):
         Каждая строка должна быть в формате вида: Васильев Василий, 888, Подразделение №1
         """
 
-        return super(WorkerManager, self)\
-            .get_queryset()\
-            .values_list('first_name', 'last_name', 'tab_num', 'department__name')\
-            .order_by('first_name', 'last_name',)
+        queryset = super(WorkerManager, self).get_queryset().values_list(
+            'first_name',
+            'last_name',
+            'tab_num',
+            'department__name'
+        ).order_by('first_name', 'last_name',)
+        list_workers = []
+        for worker in queryset:
+            list_workers.append(f'{worker[1]} {worker[0]}, {worker[2]}, {worker[3]}')
+        return list_workers
 
 
 class Department(models.Model):

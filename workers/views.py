@@ -4,4 +4,6 @@ from .models import Department, Worker
 
 
 def index(request):
-    HttpResponse('Это тестовая страница')
+    res = Worker.objects.get_workers_info()
+    print(res)
+    return HttpResponse(res)
