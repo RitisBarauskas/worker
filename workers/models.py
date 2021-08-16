@@ -21,15 +21,18 @@ class WorkerManager(models.Manager):
         Каждая строка должна быть в формате вида: Васильев Василий, 888, Подразделение №1
         """
 
-        queryset = super(WorkerManager, self).get_queryset().values_list(
+        queryset = super(WorkerManager, self).get_queryset().values(
             'first_name',
             'last_name',
             'tab_num',
-            'department__name'
+            'department__name',
         ).order_by('first_name', 'last_name',)
         list_workers = []
         for worker in queryset:
-            list_workers.append(f'{worker[1]} {worker[0]}, {worker[2]}, {worker[3]}')
+            list_workers.append(
+                f'{worker.get("first_name")} {worker.get("last_name")}, '
+                f'{worker.get("tab_num")}, {worker.get("department__name")}'
+            )
         return list_workers
 
 
