@@ -4,5 +4,8 @@ from .models import Department, Worker
 
 
 def index(request):
-    workers = Worker.objects.all()
+    # departments = Department.get_all_worker_count()
+    # return HttpResponse(departments)
+
+    workers = Worker.objects.get_workers_info()
     return HttpResponse(workers)

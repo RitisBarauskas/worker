@@ -21,7 +21,10 @@ class WorkerManager(models.Manager):
         Каждая строка должна быть в формате вида: Васильев Василий, 888, Подразделение №1
         """
 
-        raise NotImplementedError
+        return super(WorkerManager, self)\
+            .get_queryset()\
+            .values_list('first_name', 'last_name', 'tab_num', 'department__name')\
+            .order_by('first_name', 'last_name',)
 
 
 class Department(models.Model):
@@ -32,14 +35,14 @@ class Department(models.Model):
         """
         Количество активных сотрудников подразделения
         """
-        raise NotImplementedError
+        return self.all()
 
     @property
     def get_all_worker_count(self):
         """
         Количество всех сотрудников подразделения
         """
-        raise NotImplementedError
+        return self.all()
 
     def __str__(self):
         return self.name
@@ -65,7 +68,7 @@ class Worker(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name}'
+        return f'{self.last_name} {self.first_name}, {self.tab_num}, {self.department}'
 
     class Meta:
         db_table = 'workers'
