@@ -1,7 +1,7 @@
-from day_7.queryset_methods.tests import (
+from day7.tests import (
     BaseTest,
 )
-from day_7.queryset_methods.task_1.implementation import (
+from .implementation import (
     get_order_count_by_customer,
 )
 

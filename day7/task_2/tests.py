@@ -2,11 +2,11 @@ from datetime import (
     date,
 )
 
-from day_7.queryset_methods.tests import (
+from day7.tests import (
     BaseTest,
 )
 
-from day_7.queryset_methods.task_2.implementation import (
+from .implementation import (
     get_top_customer_in_period,
 )
 

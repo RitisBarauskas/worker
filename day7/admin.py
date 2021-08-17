@@ -1,3 +1,33 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
+from .models import Product, ProductCost, ProductCount, Customer, Order, OrderItem
 
-# Register your models here.
+
+@register(Product)
+class ProductAdmin(ModelAdmin):
+    pass
+
+
+@register(ProductCount)
+class ProductCountAdmin(ModelAdmin):
+    pass
+
+
+@register(ProductCost)
+class ProductCostAdmin(ModelAdmin):
+    pass
+
+
+@register(Customer)
+class CustomerAdmin(ModelAdmin):
+    pass
+
+
+@register(Order)
+class OrderAdmin(ModelAdmin):
+    pass
+
+
+@register(OrderItem)
+class OrderItem(ModelAdmin):
+    pass
+

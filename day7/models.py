@@ -12,6 +12,9 @@ class Product(models.Model):
     class Meta:
         db_table = 'product'
 
+    def __str__(self):
+        return self.name
+
 
 class ProductCount(models.Model):
     """
@@ -24,6 +27,9 @@ class ProductCount(models.Model):
 
     class Meta:
         db_table = 'product_count'
+
+    def __str__(self):
+        return f'{self.product.name} - {self.value}'
 
 
 class ProductCost(models.Model):
@@ -38,6 +44,9 @@ class ProductCost(models.Model):
     class Meta:
         db_table = 'product_cost'
 
+    def __str__(self):
+        return f'{self.product.name} - {self.value}'
+
 
 class Customer(models.Model):
     """
@@ -47,6 +56,9 @@ class Customer(models.Model):
 
     class Meta:
         db_table = 'customer'
+
+    def __str__(self):
+        return self.name
 
 
 class Order(models.Model):
@@ -60,6 +72,9 @@ class Order(models.Model):
     class Meta:
         db_table = 'order'
 
+    def __str__(self):
+        return f'Заказ № {self.number} ({self.customer.name})'
+
 
 class OrderItem(models.Model):
     """
@@ -71,3 +86,6 @@ class OrderItem(models.Model):
 
     class Meta:
         db_table = 'order_item'
+
+    def __str__(self):
+        return f'Заказ: {self.product.name} в объеме {self.count}'
