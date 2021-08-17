@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from datetime import date
 from django.http import HttpResponse
+from django.db.models import Max
 from .models import Product, ProductCost, ProductCount, Customer, Order, OrderItem
 from .task_1.implementation import get_order_count_by_customer
 
@@ -19,7 +20,9 @@ def get_top_customer_in_period(begin, end):
     Returns: возвращает имя покупателя и количество его заказов за указанный период
     """
     queryset = Order.objects.filter(date_formation__gte=begin, date_formation__lte=end)
-
+    customer_id_max = queryset.aggregate(Max('customer_id'))
+    print(queryset)
+    print(customer_id_max)
     # dict_customers = {}
     # for order in queryset:
     #     customer_id = order.get('customer_id')
