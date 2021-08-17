@@ -20,9 +20,11 @@ def get_top_customer_in_period(begin, end):
     Returns: возвращает имя покупателя и количество его заказов за указанный период
     """
     queryset = Order.objects.filter(date_formation__gte=begin, date_formation__lte=end)
-    customer_id_max = queryset.aggregate(Max('customer_id'))
+    customer_id_max = list(queryset.aggregate(Max('customer_id')).values())
+    result = queryset.filter(customer__in=customer_id_max)
     print(queryset)
     print(customer_id_max)
+    print(result)
     # dict_customers = {}
     # for order in queryset:
     #     customer_id = order.get('customer_id')
