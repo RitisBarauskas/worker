@@ -74,7 +74,7 @@ class Migration(migrations.Migration):
             name='OrderItem',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('count', models.DecimalField(verbose_name='Количество')),
+                ('count', models.DecimalField(verbose_name='Количество', decimal_places=2, max_digits=6)),
                 ('order', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='order', verbose_name='Заказ')),
                 ('product', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='product', verbose_name='Товар')),
             ],
