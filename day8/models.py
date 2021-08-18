@@ -30,8 +30,13 @@ class EducationOffice(Office):
     """
     is_active = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.address
+
     class Meta:
         db_table = 'education_office'
+        verbose_name = 'Учебный офис'
+        verbose_name_plural = 'Учебные офисы'
 
 
 class GeneralOffice(Office):
@@ -40,8 +45,13 @@ class GeneralOffice(Office):
     """
     name = models.TextField('Название головного офиса ')
 
+    def __str__(self):
+        return self.address
+
     class Meta:
         db_table = 'office'
+        verbose_name = 'Головной офис'
+        verbose_name_plural = 'Головные офисы'
 
 
 class Department(models.Model):
@@ -49,12 +59,16 @@ class Department(models.Model):
     Подразделение
     """
     name = models.CharField('Наименование', max_length=30)
-
     education_office = models.ForeignKey(EducationOffice, on_delete=models.SET_NULL, null=True )
     office = models.ForeignKey(GeneralOffice, on_delete=models.SET_NULL, null=True)
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         db_table = 'department'
+        verbose_name = 'Департамент'
+        verbose_name_plural = 'Департаменты'
 
 
 class Person(models.Model):
@@ -99,7 +113,14 @@ class OrderedWorker(Worker):
         """
         Получить значение года приема на работу
         """
-        raise NotImplementedError
+        return self.startwork_date.year
+
+    def __str__(self):
+        return f'Принят на работу: {self.startwork_date} || {self.last_name} {self.first_name}'
+
+    class Meta:
+        ordering=('first_name', 'startwork_date')
+        proxy=True
 
 
 class Director(Worker):
