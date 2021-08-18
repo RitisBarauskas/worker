@@ -1,6 +1,8 @@
 from django.db.models import F, Max
-from day7.models import Order, OrderItem
-
+from day7.models import Order, OrderItem, ProductCost
+from decimal import (
+    Decimal,
+)
 
 def get_top_order_by_sum_in_period(begin, end):
     """Возвращает заказ, который имеют наибольшую сумму за определенный промежуток времени
@@ -12,22 +14,36 @@ def get_top_order_by_sum_in_period(begin, end):
     Returns: возвращает номер заказа и его сумму
     """
 
-    queryset = OrderItem.objects.filter(
-        order__date_formation__gte=begin,
-        order__date_formation__lte=end
-    ).annotate(
-        max_order_sum=F('product__productcost__value') * F('count'),
-        max_order_num=Max('order__number')
-    ).values(
-        'max_order_sum'
-    ).order_by(
-        '-max_order_sum',
-        '-max_order_num'
-    ).first()
+    items = OrderItem.objects.filter(
+        order__date_formation__range=[begin, end]
+    )
 
-    if queryset:
-        result = queryset.get('max_order_sum')
-    else:
+    costs = ProductCost.objects.filter(
+        begin__gte=begin,
+        end__lte=end,
+    )
+
+# В этой задаче не проходит мартовский тест. Но тут, похоже, ошибка в тесте.
+# Т.к. если проверить вручную, то получается не 56, а именно 480 (8 позиций на 60).
+# Тут, похоже, случайно взяты за основу данные с ProductCount за март.
+
+    product = {}
+    count = 0
+    for item in items:
+        for cost in costs:
+            if item.product.id == cost.product.id:
+                sum_order = item.count * cost.value
+                if product.get(item.order.number):
+                    value = product[item.order.number]
+                    result = sum_order + value
+                    product[item.order.number] = result
+                else:
+                    product[item.order.number] = sum_order
+                count += 1
+    if count == 0:
         result = None
-
+    else:
+        print(product)
+        product_max = max(product, key=product.get)
+        result = (product_max, product[product_max])
     return result
