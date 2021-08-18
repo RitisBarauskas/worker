@@ -1,6 +1,8 @@
 from django.db.models import Count, Min, Sum, F, Max, Avg
-from day7.models import OrderItem
-
+from day7.models import OrderItem, ProductCost
+from decimal import (
+    Decimal,
+)
 
 def get_average_cost_without_product(product, begin, end):
     """Возвращает среднюю стоимость заказов без указанного товара за определенный промежуток времени
@@ -12,20 +14,32 @@ def get_average_cost_without_product(product, begin, end):
 
     Returns: возвращает числовое значение средней стоимости
     """
-    queryset = OrderItem.objects.values().filter(
-        order__date_formation__gte=begin,
-        order__date_formation__lte=end
-    ).annotate(
-        order_sum=F('product__productcost__value') * F('count')
-    ).exclude(
-        product__name=product
-    ).aggregate(
-        Avg('order_sum')
-    )
+    items = OrderItem.objects.filter(
+        order__date_formation__range=[begin, end]
+    ).exclude(product__name=product)
+    product = {}
+    count = 0
+    for item in items:
+        cost = ProductCost.objects.filter(
+            begin__lte=item.order.date_formation,
+            end__gte=item.order.date_formation,
+            product__name=item.product.name
+        ).first()
+        if cost is None:
+            continue
+        sum_order = cost.value * item.count
 
-    if queryset:
-        result = queryset.get('order_sum__avg')
+        if product.get(item.order.number):
+            value = product[item.order.number]
+            result = sum_order + value
+            product[item.order.number] = result
+        else:
+            count += 1
+            product[item.order.number] = sum_order
+
+    if count == 0:
+        result = Decimal(0)
     else:
-        result = None
+        result = sum(product.values()) / count
 
     return result
