@@ -78,19 +78,19 @@ class WorkerModelTest(TestCase):
             department=department)
 
 
-    # def test_all_count_workers(self):
-    #     all_count = Worker.objects_all.all().count()
-    #     self.assertEquals(all_count, 7)
-    #
-    # def test_count_only_workers(self):
-    #     only_workers = Worker.objects.all().count()
-    #     self.assertEquals(only_workers, 6)
-    #
-    # def test_ordered_worker_model(self):
-    #     worker = OrderedWorker.objects.all().first()
-    #     self.assertEquals(worker.startwork_year, 2004)
-    #
-    # def test_department_office(self):
-    #     department = Department.objects.all().first()
-    #     self.assertEquals(department.education_office.address, 'Москва')
-    #     self.assertEquals(department.office.address, 'Казань')
+    def test_all_count_workers(self):
+        all_count = Worker.objects_all.all().count()
+        self.assertEquals(all_count, 7)
+
+    def test_count_only_workers(self):
+        only_workers = Worker.objects.all().count()
+        self.assertEquals(only_workers, 6)
+
+    def test_ordered_worker_model(self):
+        worker = OrderedWorker.objects.all().first()
+        self.assertEquals(worker.startwork_year, 2004)
+
+    def test_department_office(self):
+        department = Department.objects.all().first()
+        self.assertEquals(department.education_office.address, 'Москва')
+        self.assertEquals(department.office.address, 'Казань')

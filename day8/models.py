@@ -10,27 +10,34 @@ class WorkerManager(models.Manager):
         Переопределенный кверисет возвращающий всех сотрудников без директоров
         """
 
-        raise NotImplementedError
+        return super(WorkerManager, self).get_queryset().exclude(director__isnull=False)
 
 
-class EducationOffice(models.Model):
+class Office(models.Model):
+    """
+    Офисы компании
+    """
+    address = models.TextField('Адрес')
+    mail = models.CharField('Адрес почты', max_length=30, )
+
+    class Meta:
+        abstract = True
+
+
+class EducationOffice(Office):
     """
     Учебный офис
     """
-    address = models.TextField('Адрес')
-    mail = models.CharField('Адрес почты', max_length=30,)
     is_active = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'education_office'
 
 
-class GeneralOffice(models.Model):
+class GeneralOffice(Office):
     """
     Головной офис
     """
-    address = models.TextField('Адрес')
-    mail = models.CharField('Адрес почты', max_length=30)
     name = models.TextField('Название головного офиса ')
 
     class Meta:
@@ -77,6 +84,10 @@ class Worker(Person):
     class Meta:
         db_table = 'workers'
         verbose_name = 'Сотрудник'
+        verbose_name_plural = 'Сотрудники'
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
 
 
 class OrderedWorker(Worker):
@@ -95,9 +106,13 @@ class Director(Worker):
     """
     Директор
     """
-    # что здесь не хватает?
+    objects = models.Manager()
     grade = models.IntegerField('Оценка', default=1)
 
     class Meta:
         db_table = 'directors'
         verbose_name = 'Директор'
+        verbose_name_plural = 'Директора'
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
