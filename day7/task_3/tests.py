@@ -5,11 +5,11 @@ from decimal import (
     Decimal,
 )
 
-from day_7.queryset_methods.tests import (
+from day7.tests import (
     BaseTest,
 )
 
-from day_7.queryset_methods.task_3.implementation import (
+from .implementation import (
     get_top_order_by_sum_in_period,
 )
 
