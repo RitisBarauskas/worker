@@ -5,11 +5,11 @@ from decimal import (
     Decimal,
 )
 
-from day_7.queryset_methods.tests import (
+from day7.tests import (
     BaseTest,
 )
 
-from day_7.queryset_methods.task_5.implementation import (
+from day7.task_5.implementation import (
     get_average_cost_without_product,
 )
 
